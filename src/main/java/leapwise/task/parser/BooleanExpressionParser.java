@@ -8,14 +8,9 @@ import java.util.Stack;
 
 public class BooleanExpressionParser {
 
-    private static final Logger logger = LogManager.getLogger(BooleanExpressionParser.class);
+    private final Logger logger = LogManager.getLogger(BooleanExpressionParser.class);
 
-    public void checkMathParser() {
-
-        //System.out.println(evaluateExpression("(1+2)*4-3"));
-    }
-
-    public static String evaluateExpression(String expression, RootNode root) {
+    public String evaluateExpression(String expression, RootNode root) {
         // Create operandStack to store operands. (values)
         Stack<String> operandStack = new Stack<>();
 
@@ -87,7 +82,7 @@ public class BooleanExpressionParser {
         return operandStack.pop();
     }
 
-    public static void processAnOperator(
+    public void processAnOperator(
             Stack<String> operandStack, Stack<String> operatorStack) {
         String operator = operatorStack.pop();
         String operand1 = operandStack.pop();
@@ -111,7 +106,7 @@ public class BooleanExpressionParser {
             operandStack.push((Boolean.parseBoolean(operand2) || Boolean.parseBoolean(operand1)) + "");
     }
 
-    public static String regexLogicalExpression(String s, RootNode root) {
+    public String regexLogicalExpression(String s, RootNode root) {
         String result = s;
 
         // Throw an exception if the customer or customer.address objects are null

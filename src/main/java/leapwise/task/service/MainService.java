@@ -5,6 +5,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import leapwise.task.parser.BooleanExpressionParser;
+import leapwise.task.parser.JSParser;
 import leapwise.task.parser.MathExpressionParser;
 import leapwise.task.persistence.model.RootNode;
 import org.apache.logging.log4j.LogManager;
@@ -41,36 +42,28 @@ public class MainService {
 		
 		Expression expression = expressionRepo.getById(id);
 
-		logger.info("Json Validation Schema to persist: {},\n Input boolean expression for the schema evaluation: {}", gson.toJson(rootNode), expression.getValue());
-		
-		String boolExpression = regexBooleanExpression(expression.getValue());
+		String result = "";
 
 		if (expression.getName().trim().toLowerCase().equals("complex logical expression")) {
-			BooleanExpressionParser.regexLogicalExpression(expression.getValue(), rootNode);
-			System.out.println("Evaluated boolean expression result: " +
-					BooleanExpressionParser.evaluateExpression(expression.getValue(), rootNode));
+			BooleanExpressionParser booleanParser = new BooleanExpressionParser();
+
+			result = booleanParser.evaluateExpression(expression.getValue(), rootNode);
+
+			logger.info("Evaluated boolean expression result: {}", result);
+
 		} else if (expression.getName().trim().toLowerCase().equals("arithmetic expression")) {
-			//TODO work in progress
-			System.out.println(MathExpressionParser.evaluateExpression(expression.getValue()));
+
+			MathExpressionParser mathParser = new MathExpressionParser();
+
+			result = Integer.toString(mathParser.evaluateExpression(expression.getValue()));
+			logger.info("Evaluated arithmetic expression result: {}", result);
+
 		} else if (expression.getName().trim().toLowerCase().equals("javascript engine")) {
 
-		}
+			JSParser javaScriptParser = new JSParser();
 
-
-		logger.info("Replaced boolean expression: {}", boolExpression);
-		
-		ScriptEngineManager factory = new ScriptEngineManager();
-        ScriptEngine engine = factory.getEngineByName("JavaScript");
-        
-        String result = "";
-        
-        try {
-			engine.eval("expression = " + gson.toJson(rootNode) + ";");
-			result = engine.eval(boolExpression).toString();
-			logger.info("Evaluated boolean expression result: {}", result);
-			
-		} catch (ScriptException e) {
-			logger.error("Error while scripting a boolean expression", e);
+			result = javaScriptParser.evaluateExpression(expression.getValue(), rootNode);
+			logger.info("Evaluated JavaScript expression result: {}", result);
 		}
 		
 		return result;

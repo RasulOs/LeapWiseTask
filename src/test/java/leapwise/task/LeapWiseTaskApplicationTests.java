@@ -22,7 +22,7 @@ public class LeapWiseTaskApplicationTests {
 		context = app.run ();
 
 		Expression expression = new Expression();
-		expression.setName("test expression");
+		expression.setName("Complex logical expression");
 		expression.setValue("(customer.firstName == \"JOHN\" && customer.salary < 100) OR (customer.address != null && customer.address.city == \"Washington\")");
 
 		ResponseEntity<String> responseEntity = testRestTemplate.exchange("http://localhost:8081/expression", HttpMethod.POST, createHttpRequest(expression), String.class);

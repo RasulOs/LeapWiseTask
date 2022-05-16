@@ -1,15 +1,16 @@
 package leapwise.task.parser;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Stack;
 
 public class MathExpressionParser {
 
-    public static void checkMathParser() {
+    private final Logger logger = LogManager.getLogger(MathExpressionParser.class);
 
-        //System.out.println(evaluateExpression("(1+2)*4-3*3"));
-    }
 
-    public static int evaluateExpression(String expression) {
+    public int evaluateExpression(String expression) {
         // Create operandStack to store operands
         Stack<Integer> operandStack = new Stack<>();
 
@@ -72,7 +73,7 @@ public class MathExpressionParser {
         return operandStack.pop();
     }
 
-    public static void processAnOperator(
+    public void processAnOperator(
             Stack<Integer> operandStack, Stack<Character> operatorStack) {
         char op = operatorStack.pop();
         int op1 = operandStack.pop();
@@ -87,7 +88,7 @@ public class MathExpressionParser {
             operandStack.push(op2 / op1);
     }
 
-    public static String insertBlanks(String s) {
+    public String insertBlanks(String s) {
 
         String result = "";
 
@@ -100,7 +101,9 @@ public class MathExpressionParser {
                 result += s.charAt(i);
         }
 
-        System.out.println(result);
+        logger.info("Arithmetic expression before regex {}", s);
+        logger.info("Arithmetic expression after regex {}", result);
+
         return result;
     }
 
