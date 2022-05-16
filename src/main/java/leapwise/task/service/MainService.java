@@ -18,42 +18,43 @@ import com.google.gson.GsonBuilder;
 public class MainService {
 
 	private final Logger logger = LogManager.getLogger(MainService.class);
-	private final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
 	@Autowired
 	private CustomerRepo customerRepo;
 
 	@Autowired
 	private ExpressionRepo expressionRepo;
-	
+
 	public MainService(CustomerRepo customerRepo, ExpressionRepo expressionRepo) {
 		this.customerRepo = customerRepo;
 		this.expressionRepo = expressionRepo;
 	}
-	
+
 	public String executeLogicalExpression(int id, RootNode rootNode) {
-		
+
 		customerRepo.save(rootNode);
-		
+
 		Expression expression = expressionRepo.getById(id);
 
 		String result = "";
 
-		if (expression.getName().trim().toLowerCase().equals("complex logical expression")) {
+		if (expression.getName().trim().equalsIgnoreCase("complex logical expression")) {
 			BooleanExpressionParser booleanParser = new BooleanExpressionParser();
 
 			result = booleanParser.evaluateExpression(expression.getValue(), rootNode);
 
 			logger.info("Evaluated boolean expression result: {}", result);
 
-		}  else if (expression.getName().trim().toLowerCase().equals("javascript engine")) {
+		}  else if (expression.getName().trim().equalsIgnoreCase("javascript")) {
 
 			JSParser javaScriptParser = new JSParser();
 
 			result = javaScriptParser.evaluateExpression(expression.getValue(), rootNode);
 			logger.info("Evaluated JavaScript expression result: {}", result);
+		} else {
+			logger.info("Not implemented");
 		}
-		
+
 		return result;
 	}
 

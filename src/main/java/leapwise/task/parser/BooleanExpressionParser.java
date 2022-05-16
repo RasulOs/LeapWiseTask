@@ -11,6 +11,7 @@ public class BooleanExpressionParser {
     private final Logger logger = LogManager.getLogger(BooleanExpressionParser.class);
 
     public String evaluateExpression(String expression, RootNode root) {
+
         // Create operandStack to store operands. (values)
         Stack<String> operandStack = new Stack<>();
 
@@ -88,26 +89,38 @@ public class BooleanExpressionParser {
         String operand1 = operandStack.pop();
         String operand2 = operandStack.pop();
 
-        if (operator.equals("=="))
-            operandStack.push(operand2.equals(operand1) + "");
-        else if (operator.equals("!="))
-            operandStack.push(!operand2.equals(operand1) + "");
-        else if (operator.equals("<"))
-            operandStack.push((Integer.parseInt(operand2) < Integer.parseInt(operand1)) + "");
-        else if (operator.equals("<="))
-            operandStack.push((Integer.parseInt(operand2) <= Integer.parseInt(operand1)) + "");
-        else if (operator.equals(">"))
-            operandStack.push((Integer.parseInt(operand2) > Integer.parseInt(operand1)) + "");
-        else if (operator.equals(">="))
-            operandStack.push((Integer.parseInt(operand2) >= Integer.parseInt(operand1)) + "");
-        else if (operator.equals("&&"))
-            operandStack.push((Boolean.parseBoolean(operand2) && Boolean.parseBoolean(operand1)) + "");
-        else if (operator.equals("||"))
-            operandStack.push((Boolean.parseBoolean(operand2) || Boolean.parseBoolean(operand1)) + "");
+        switch (operator) {
+            case "==":
+                operandStack.push(operand2.equals(operand1) + "");
+                break;
+            case "!=":
+                operandStack.push(!operand2.equals(operand1) + "");
+                break;
+            case "<":
+                operandStack.push((Integer.parseInt(operand2) < Integer.parseInt(operand1)) + "");
+                break;
+            case "<=":
+                operandStack.push((Integer.parseInt(operand2) <= Integer.parseInt(operand1)) + "");
+                break;
+            case ">":
+                operandStack.push((Integer.parseInt(operand2) > Integer.parseInt(operand1)) + "");
+                break;
+            case ">=":
+                operandStack.push((Integer.parseInt(operand2) >= Integer.parseInt(operand1)) + "");
+                break;
+            case "&&":
+                operandStack.push((Boolean.parseBoolean(operand2) && Boolean.parseBoolean(operand1)) + "");
+                break;
+            case "||":
+                operandStack.push((Boolean.parseBoolean(operand2) || Boolean.parseBoolean(operand1)) + "");
+                break;
+        }
     }
 
     public String regexLogicalExpression(String s, RootNode root) {
-        String result = s;
+        String result;
+
+        logger.info("The logical expression before regex {}", s);
 
         // Throw an exception if the customer or customer.address objects are null
         if ((root.getCustomer() != null) && (root.getCustomer().getAddress() != null)) {
@@ -139,7 +152,6 @@ public class BooleanExpressionParser {
             throw new IllegalArgumentException("Customer object should not be null");
         }
 
-        logger.info("The logical expression before regex {}", s);
         logger.info("The logical expression after regex {}", result);
 
         return result;
