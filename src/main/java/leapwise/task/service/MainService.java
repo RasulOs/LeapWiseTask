@@ -1,12 +1,7 @@
 package leapwise.task.service;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 import leapwise.task.parser.BooleanExpressionParser;
 import leapwise.task.parser.JSParser;
-import leapwise.task.parser.MathExpressionParser;
 import leapwise.task.persistence.model.RootNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,14 +46,7 @@ public class MainService {
 
 			logger.info("Evaluated boolean expression result: {}", result);
 
-		} else if (expression.getName().trim().toLowerCase().equals("arithmetic expression")) {
-
-			MathExpressionParser mathParser = new MathExpressionParser();
-
-			result = Integer.toString(mathParser.evaluateExpression(expression.getValue()));
-			logger.info("Evaluated arithmetic expression result: {}", result);
-
-		} else if (expression.getName().trim().toLowerCase().equals("javascript engine")) {
+		}  else if (expression.getName().trim().toLowerCase().equals("javascript engine")) {
 
 			JSParser javaScriptParser = new JSParser();
 
